@@ -1,7 +1,6 @@
 package bingodiscordlogger;
 
 import java.time.Instant;
-import com.google.common.base.Strings;
 import com.google.inject.Provides;
 
 import javax.inject.Inject;
@@ -75,17 +74,10 @@ public class BingoDiscordLoggerPlugin extends Plugin
         {
             return;
         }
-        switch (event.getKey())
+        if ("bingoListUrl".equals(event.getKey()))
         {
-            case "bingoItemIds":
-                bingoItemList.reloadManualItemIds();
-                break;
-            case "bingoListUrl":
-                // URL changed: reschedule (an empty URL stops polling) and refetch now.
-                bingoItemList.scheduleRemoteRefresh();
-                break;
-            default:
-                break;
+            // URL changed: reschedule (an empty URL stops polling) and refetch now.
+            bingoItemList.scheduleRemoteRefresh();
         }
     }
 
@@ -113,13 +105,19 @@ public class BingoDiscordLoggerPlugin extends Plugin
         processLoot(lootReceived, currentIds);
     }
 
+
+    /**
+     * Formats loot data into an embedding then sends it via webhook to Discord.
+     *
+     * @param lootReceived      The loot data that will be processed
+     * @param currentIds        The list of bingo-relevant item IDs
+     */
     private void processLoot(LootReceived lootReceived, Set<Integer> currentIds)
     {
         log.debug("Detected processLoot! - processLoot was reached");
 
         // Build the structured payload for the bot
         WebhookBody.Payload payload = new WebhookBody.Payload();
-        payload.setEventId(config.eventId());
         payload.setPlayer(getPlayerName());
         payload.setSource(lootReceived.getName());
         payload.setSourceType(lootReceived.getType().name());
@@ -158,48 +156,25 @@ public class BingoDiscordLoggerPlugin extends Plugin
             return;
         }
 
-        // Build the rich embed
         WebhookBody.Embed embed = new WebhookBody.Embed();
-        // 0x57F287 is Discord's "online green" - good visibility in light and dark mode.
-        // Try 0x5865F2 for Discord blurple, 0xFEE75C for yellow, 0xED4245 for red.
         embed.setColor(0x57F287);
-        embed.setTitle("Bingo Drop");
+        embed.setTitle("Bingo Loot");
         embed.setDescription(dropList.toString());
 
-        // Author block: player name in the top-left
         WebhookBody.Author author = new WebhookBody.Author();
         author.setName(payload.getPlayer());
         embed.setAuthor(author);
 
-        // Two side-by-side fields below the description
         WebhookBody.Field sourceField = new WebhookBody.Field();
-        sourceField.setName("Source");
-        sourceField.setValue(payload.getSource());
+        sourceField.setValue("From: " + payload.getSource());
         sourceField.setInline(true);
         embed.getFields().add(sourceField);
 
-        WebhookBody.Field typeField = new WebhookBody.Field();
-        typeField.setName("Type");
-        typeField.setValue(prettySourceType(payload.getSourceType()));
-        typeField.setInline(true);
-        embed.getFields().add(typeField);
-
-        // Embed the screenshot inside the card if we're sending one.
-        // "attachment://image.png" tells Discord to look at the file we uploaded
-        // in the same multipart POST under the field name matching this filename.
         if (config.sendScreenshot())
         {
             WebhookBody.Image image = new WebhookBody.Image();
             image.setUrl("attachment://image.png");
             embed.setImage(image);
-        }
-
-        // Footer with the event ID, useful for distinguishing concurrent bingos
-        if (!Strings.isNullOrEmpty(payload.getEventId()))
-        {
-            WebhookBody.Footer footer = new WebhookBody.Footer();
-            footer.setText("Event: " + payload.getEventId());
-            embed.setFooter(footer);
         }
 
         // ISO 8601 in UTC. Discord renders this in each viewer's local timezone.
