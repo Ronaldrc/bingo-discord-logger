@@ -187,21 +187,4 @@ public class BingoDiscordLoggerPlugin extends Plugin
 
         webhookClient.send(body);
     }
-
-    /**
-     * Convert the raw LootRecordType name (e.g. "NPC", "PICKPOCKET") into something
-     * a human would want to read in the embed.
-     */
-    private static String prettySourceType(String type)
-    {
-        if (type == null) return "Unknown";
-        switch (type)
-        {
-            case "NPC":        return "NPC Kill";
-            case "EVENT":      return "Chest / Event";
-            case "PICKPOCKET": return "Pickpocket";
-            case "PLAYER":     return "PvP";
-            default:           return "Unknown";
-        }
-    }
 }
