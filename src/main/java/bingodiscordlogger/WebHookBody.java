@@ -1,5 +1,6 @@
 package bingodiscordlogger;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -7,20 +8,59 @@ import lombok.Data;
 @Data
 class WebhookBody
 {
-    // What Discord renders in the channel for human eyeballing.
     private String content;
-    // Structured data the bot will parse out of payload_json. Discord ignores
-    // unknown top-level fields, so this rides along untouched.
+
+    private List<Embed> embeds = new ArrayList<>();
+
+    // Our structured bot payload. Discord ignores unknown top-level fields,
+    // so this rides along untouched in payload_json.
     private Payload bingo;
+
+    @Data
+    static class Embed
+    {
+        private int color;
+        private String title;
+        private String description;
+        private Author author;
+        private List<Field> fields = new ArrayList<>();
+        private Image image;
+        private String timestamp;
+    }
+
+    @Data
+    static class Author
+    {
+        private String name;
+        // Optional - small avatar to the left of the name.
+        @SerializedName("icon_url")
+        private String iconUrl;
+    }
+
+    @Data
+    static class Field
+    {
+        private String name;
+        private String value;
+        // Inline fields render side-by-side in columns rather than stacked.
+        private boolean inline;
+    }
+
+    @Data
+    static class Image
+    {
+        // Either a real URL or "attachment://filename.png" to reference an
+        // uploaded file from the same multipart POST.
+        private String url;
+    }
 
     @Data
     static class Payload
     {
-        private String eventId;
         private String player;
-        private String source;       // NPC name, "Chambers of Xeric", "Clue scroll (medium)", etc.
-        private String sourceType;   // NPC / EVENT / PICKPOCKET / UNKNOWN
-        private int combatLevel;     // -1 for non-NPC sources
+        private String source;
+        private String sourceType;
+        private int combatLevel;
         private long timestamp;
         private List<Item> items = new ArrayList<>();
 
