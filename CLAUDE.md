@@ -15,6 +15,10 @@ A single-purpose plugin: it watches loot drops, keeps the ones on a configured "
 2. `processLoot` matches each `ItemStack` against the bingo set (using `itemManager.canonicalize(id)` so noted/placeholder variants resolve to the canonical ID), and builds a `WebhookBody`.
 3. `DiscordWebhookClient.send` POSTs as `multipart/form-data` via the injected `OkHttpClient` (async `enqueue`), once per webhook URL.
 
+**Other files**
+1. `parseCsv` in Utils extracts item_id from an CSV file containing item_id and item names
+2. `Class BingoItemList` handles fetching and caching the bingo drop item IDs from a remote Google Sheet CSV (`config.bingoListUrl()`), polling every 15 minutes on RuneLite's shared `ScheduledExecutorService`. Stores results in a `volatile Set<Integer>` so the client thread can safely read it from `onLootReceived`. HTTP fetches are async via OkHttp. `start()` schedules the refresh; `stop()` cancels the task (without shutting down the shared pool) and clears the set. Empty/malformed URLs result in an empty match set.
+
 **`WebhookBody` dual purpose** — serialized once into the `payload_json` part. It carries both Discord's rendered `embeds` *and* a custom `bingo` (`Payload`) object with structured drop data. Discord ignores unknown top-level fields, so the same POST renders a rich embed for humans **and** feeds a downstream bot the machine-readable payload. Keep both in sync when changing the schema. JSON is produced with `RuneLiteAPI.GSON` (do not build a Gson).
 
 **Screenshots** — when `sendScreenshot` is on, `DrawManager.requestNextFrameListener` captures the next frame; the PNG is added to the multipart body as the `file` part named `image.png`, and the embed references it via `attachment://image.png`.

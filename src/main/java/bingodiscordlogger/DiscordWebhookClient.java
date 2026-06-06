@@ -1,6 +1,5 @@
 package bingodiscordlogger;
 
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
 import javax.imageio.ImageIO;
@@ -12,15 +11,7 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.ui.DrawManager;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
 import static net.runelite.http.api.RuneLiteAPI.GSON;
 
@@ -73,6 +64,7 @@ public class DiscordWebhookClient
                     log.error("Error converting image to byte array", e);
                 }
                 send(body, imageBytes);
+                log.debug("Body of WebhookBody is \n{}", body);
             });
         }
         else
@@ -83,47 +75,54 @@ public class DiscordWebhookClient
 
     private void send(WebhookBody body, byte[] screenshot)
     {
+        String configUrl = config.webhook();
+        HttpUrl url = HttpUrl.parse(configUrl);
+        if (url == null)
+        {
+            log.warn("Malformed webhook URL: {}", configUrl);
+            return;
+        }
         MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("payload_json", GSON.toJson(body));
-
         if (screenshot != null)
         {
             requestBodyBuilder.addFormDataPart("file", "image.png",
-                    RequestBody.create(MediaType.parse("image/png"), screenshot));
+                RequestBody.create(MediaType.parse("image/png"), screenshot));
         }
 
-        MultipartBody requestBody = requestBodyBuilder.build();
 
-        for (String url : Splitter.on('\n').omitEmptyStrings().trimResults().split(config.webhook()))
+        Request request = new Request.Builder()
+            .url(url)
+            .post(requestBodyBuilder.build())
+            .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback()
         {
-            HttpUrl u = HttpUrl.parse(url);
-            if (u == null)
+            @Override
+            public void onFailure(Call call, IOException e)
             {
-                log.warn("Malformed webhook URL: {}", url);
-                continue;
+                log.warn("Error submitting webhook: ", e);
             }
 
-            Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-
-            okHttpClient.newCall(request).enqueue(new Callback()
+            @Override
+            public void onResponse(Call call, Response response)
             {
-                @Override
-                public void onFailure(Call call, IOException e)
+                try (ResponseBody responseBody = response.body())
                 {
-                    log.warn("Error submitting webhook", e);
+                    if (!response.isSuccessful())
+                    {
+                        String bodyText = responseBody != null ? responseBody.string() : "<no body>";
+                        log.warn("Webhook returned {}: {}", response.code(), bodyText);
+                    }
                 }
-
-                @Override
-                public void onResponse(Call call, Response response)
+                catch (IOException e)
                 {
-                    response.close();
+                    log.warn("Failed to read webhook response body", e);
                 }
-            });
-        }
+                response.close();
+            }
+        });
     }
 
     private static byte[] convertImageToByteArray(BufferedImage bufferedImage) throws IOException

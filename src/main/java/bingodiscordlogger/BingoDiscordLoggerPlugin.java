@@ -84,7 +84,7 @@ public class BingoDiscordLoggerPlugin extends Plugin
     @Subscribe
     public void onLootReceived(LootReceived lootReceived)
     {
-        // If item obtained via Player Kill, return
+        // If item obtained via Player Kill, exit
         LootRecordType type = lootReceived.getType();
         if (type == LootRecordType.PLAYER)
         {
@@ -99,9 +99,6 @@ public class BingoDiscordLoggerPlugin extends Plugin
         }
 
         // Send valid bingo loot to webhook
-        log.debug("Detected onLootReceived! - onLootReceived sub was reached");
-        log.debug("Inside onLootReceived! - Object metadata \n{}", lootReceived.getMetadata().toString());
-
         processLoot(lootReceived, currentIds);
     }
 
@@ -114,8 +111,6 @@ public class BingoDiscordLoggerPlugin extends Plugin
      */
     private void processLoot(LootReceived lootReceived, Set<Integer> currentIds)
     {
-        log.debug("Detected processLoot! - processLoot was reached");
-
         // Build the structured payload for the bot
         WebhookBody.Payload payload = new WebhookBody.Payload();
         payload.setPlayer(getPlayerName());
@@ -147,28 +142,26 @@ public class BingoDiscordLoggerPlugin extends Plugin
                 dropList.append("\n");
             }
             // Bold the item name so it stands out in the embed body
-            dropList.append("**").append(stack.getQuantity()).append(" x ")
-                    .append(comp.getName()).append("**");
+            dropList.append(stack.getQuantity()).append(" x ")
+                    .append(comp.getName());
         }
 
         if (payload.getItems().isEmpty())
         {
+            log.debug("step payload getItems is empty");
             return;
         }
 
+        // Create Discord embedding
         WebhookBody.Embed embed = new WebhookBody.Embed();
         embed.setColor(0x57F287);
         embed.setTitle("Bingo Loot");
-        embed.setDescription(dropList.toString());
+        String description = payload.getPlayer() + " has looted:\n\n" + dropList + "\nFrom: " + payload.getSource();
+        embed.setDescription(description);
 
         WebhookBody.Author author = new WebhookBody.Author();
         author.setName(payload.getPlayer());
         embed.setAuthor(author);
-
-        WebhookBody.Field sourceField = new WebhookBody.Field();
-        sourceField.setValue("From: " + payload.getSource());
-        sourceField.setInline(true);
-        embed.getFields().add(sourceField);
 
         if (config.sendScreenshot())
         {
