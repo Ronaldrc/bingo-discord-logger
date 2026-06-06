@@ -1,6 +1,5 @@
 package bingodiscordlogger;
 
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
 import javax.imageio.ImageIO;
