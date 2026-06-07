@@ -1,3 +1,7 @@
+<p style="text-align: center">
+  <img src="img.png" alt="Lil Brozzer mug shot"/>
+</p>
+
 # Bingo Discord Logger
 
 Sends bingo-relevant drops straight to a Discord channel via webhook. When you receive
@@ -30,8 +34,8 @@ list the base item. PvP (player-kill) loot is ignored.
 
 | Setting | Description |
 | --- | --- |
-| **Discord Webhook URL** | One or more Discord webhook URLs, one per line. |
 | **Send Screenshot** | Attach a screenshot of the next frame when a drop is logged. On by default. |
+| **Discord Webhook URL** | One or more Discord webhook URLs, one per line. |
 | **Bingo List URL** | Link to a published Google Sheet (CSV) whose first column is item IDs. Shared across everyone using the same link. Leave blank to disable. |
 
 #### Using a Google Sheet
