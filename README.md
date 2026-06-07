@@ -1,4 +1,4 @@
-<p style="center">
+<p align="center">
   <img src="img.png" alt="Lil Brozzer mug shot"/>
 </p>
 
