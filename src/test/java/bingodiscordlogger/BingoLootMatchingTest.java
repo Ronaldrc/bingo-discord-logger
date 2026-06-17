@@ -71,7 +71,7 @@ public class BingoLootMatchingTest
 	{
 		lenient().when(client.getLocalPlayer()).thenReturn(localPlayer);
 		lenient().when(localPlayer.getName()).thenReturn("Zezima");
-		// By default item IDs are already canonical (identity); overridden where noted.
+		// By default, item IDs are already canonical (identity); overridden where noted.
 		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
 		lenient().when(config.sendScreenshot()).thenReturn(false);
 	}
