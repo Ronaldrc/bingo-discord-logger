@@ -79,7 +79,7 @@ public class DiscordWebhookClient
         HttpUrl url = HttpUrl.parse(configUrl);
         if (url == null)
         {
-            log.warn("Malformed webhook URL: {}", configUrl);
+            log.debug("Malformed webhook URL: {}", configUrl);
             return;
         }
         MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
@@ -102,7 +102,7 @@ public class DiscordWebhookClient
             @Override
             public void onFailure(Call call, IOException e)
             {
-                log.warn("Error submitting webhook: ", e);
+                log.debug("Error submitting webhook: ", e);
             }
 
             @Override
@@ -113,12 +113,12 @@ public class DiscordWebhookClient
                     if (!response.isSuccessful())
                     {
                         String bodyText = responseBody != null ? responseBody.string() : "<no body>";
-                        log.warn("Webhook returned {}: {}", response.code(), bodyText);
+                        log.debug("Webhook returned {}: {}", response.code(), bodyText);
                     }
                 }
                 catch (IOException e)
                 {
-                    log.warn("Failed to read webhook response body", e);
+                    log.debug("Failed to read webhook response body: ", e);
                 }
                 response.close();
             }

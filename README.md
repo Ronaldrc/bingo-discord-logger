@@ -4,9 +4,9 @@
 
 # Bingo Discord Logger
 
-Sends bingo-relevant drops straight to a Discord channel via webhook. When you receive
-loot containing an item on your configured bingo list, the plugin posts a rich embed —
-with an optional in-game screenshot — to one Discord webhook.
+Sends bingo-relevant drops straight to a Discord channel via webhook with an optional screenshot. 
+
+Use Google Sheets (CSV) to configure your bingo list.
 
 Built for clan bingo events: point everyone at the same shared item list, and drops are
 logged automatically as they happen.

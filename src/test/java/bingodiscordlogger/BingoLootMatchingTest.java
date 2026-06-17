@@ -71,7 +71,7 @@ public class BingoLootMatchingTest
 	{
 		lenient().when(client.getLocalPlayer()).thenReturn(localPlayer);
 		lenient().when(localPlayer.getName()).thenReturn("Zezima");
-		// By default item IDs are already canonical (identity); overridden where noted.
+		// By default, item IDs are already canonical (identity); overridden where noted.
 		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
 		lenient().when(config.sendScreenshot()).thenReturn(false);
 	}
@@ -154,7 +154,7 @@ public class BingoLootMatchingTest
 		assertEquals(1, body.getEmbeds().size());
 		WebhookBody.Embed embed = body.getEmbeds().get(0);
 		assertEquals("Bingo Loot", embed.getTitle());
-		assertTrue(embed.getDescription().contains("**2 x Abyssal whip**"));
+		assertTrue(embed.getDescription().contains("2 x Abyssal whip"));
 		assertEquals("Zezima", embed.getAuthor().getName());
 		// Screenshot disabled -> no attachment image referenced.
 		assertNull(embed.getImage());
