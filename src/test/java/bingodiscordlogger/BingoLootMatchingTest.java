@@ -154,7 +154,7 @@ public class BingoLootMatchingTest
 		assertEquals(1, body.getEmbeds().size());
 		WebhookBody.Embed embed = body.getEmbeds().get(0);
 		assertEquals("Bingo Loot", embed.getTitle());
-		assertTrue(embed.getDescription().contains("**2 x Abyssal whip**"));
+		assertTrue(embed.getDescription().contains("2 x Abyssal whip"));
 		assertEquals("Zezima", embed.getAuthor().getName());
 		// Screenshot disabled -> no attachment image referenced.
 		assertNull(embed.getImage());
