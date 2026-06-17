@@ -105,7 +105,7 @@ public class BingoItemList
         HttpUrl parsed = HttpUrl.parse(url);
         if (parsed == null)
         {
-            log.warn("Malformed bingo list URL: {}", url);
+            log.debug("Malformed bingo list URL: {}", url);
             return;
         }
 
@@ -115,7 +115,7 @@ public class BingoItemList
             @Override
             public void onFailure(Call call, IOException e)
             {
-                log.warn("Failed to fetch bingo list", e);
+                log.debug("Failed to fetch bingo list", e);
             }
 
             @Override
@@ -125,7 +125,7 @@ public class BingoItemList
                 {
                     if (!r.isSuccessful() || r.body() == null)
                     {
-                        log.warn("Bingo list fetch returned HTTP {}", r.code());
+                        log.debug("Bingo list fetch returned HTTP {}", r.code());
                         return;
                     }
                     Set<Integer> ids = Utils.parseCsv(r.body().string());
@@ -136,7 +136,7 @@ public class BingoItemList
                 }
                 catch (IOException e)
                 {
-                    log.warn("Error reading bingo list response", e);
+                    log.debug("Error reading bingo list response", e);
                 }
             }
         });
