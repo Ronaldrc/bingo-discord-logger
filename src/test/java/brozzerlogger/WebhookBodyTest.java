@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import com.google.gson.JsonObject;
 import org.junit.Test;

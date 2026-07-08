@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import com.google.common.base.Splitter;
 import java.util.HashSet;

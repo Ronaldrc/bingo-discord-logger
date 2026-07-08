@@ -1,14 +1,13 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
 
-@ConfigGroup(BingoDiscordLoggerConfig.GROUP)
-public interface BingoDiscordLoggerConfig extends Config
+@ConfigGroup(BrozzerLoggerConfig.GROUP)
+public interface BrozzerLoggerConfig extends Config
 {
-    String GROUP = "bingodiscordlogger";
+    String GROUP = "brozzerLogger";
 
     @ConfigItem(
             keyName = "sendScreenshot",
@@ -35,7 +34,7 @@ public interface BingoDiscordLoggerConfig extends Config
     }
 
     @ConfigItem(
-            keyName = "bingoDiscordLogger",
+            keyName = "discordWebhookUrl",
             name = "Discord Webhook URL",
             description = "Enter the discord webhook URL you would to send content to.",
             position = 2

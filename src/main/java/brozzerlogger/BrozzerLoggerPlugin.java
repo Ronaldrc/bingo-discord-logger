@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import java.time.Instant;
 import com.google.inject.Provides;
@@ -21,17 +21,18 @@ import java.util.Set;
 
 @Slf4j
 @PluginDescriptor(
-        name = "Bingo Discord Logger",
+        name = "Brozzer Logger",
         description = "Sends bingo-relevant drops to a Discord webhook",
-        tags = {"bingo", "clan", "loot", "webhook", "discord"}
+        tags = {"bingo", "clan", "loot", "webhook", "discord"},
+        configName = "BingoDiscordLoggerPlugin"
 )
-public class BingoDiscordLoggerPlugin extends Plugin
+public class BrozzerLoggerPlugin extends Plugin
 {
     @Inject
     private Client client;
 
     @Inject
-    private BingoDiscordLoggerConfig config;
+    private BrozzerLoggerConfig config;
 
     @Inject
     private ItemManager itemManager;
@@ -57,9 +58,9 @@ public class BingoDiscordLoggerPlugin extends Plugin
     }
 
     @Provides
-    BingoDiscordLoggerConfig provideConfig(ConfigManager configManager)
+    BrozzerLoggerConfig provideConfig(ConfigManager configManager)
     {
-        return configManager.getConfig(BingoDiscordLoggerConfig.class);
+        return configManager.getConfig(BrozzerLoggerConfig.class);
     }
 
     private String getPlayerName()
@@ -70,7 +71,7 @@ public class BingoDiscordLoggerPlugin extends Plugin
     @Subscribe
     public void onConfigChanged(ConfigChanged event)
     {
-        if (!BingoDiscordLoggerConfig.GROUP.equals(event.getGroup()))
+        if (!BrozzerLoggerConfig.GROUP.equals(event.getGroup()))
         {
             return;
         }
