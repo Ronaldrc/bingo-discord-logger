@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import com.google.common.base.Strings;
 
@@ -28,12 +28,12 @@ import static net.runelite.http.api.RuneLiteAPI.GSON;
 @Singleton
 public class DiscordWebhookClient
 {
-    private final BingoDiscordLoggerConfig config;
+    private final BrozzerLoggerConfig config;
     private final OkHttpClient okHttpClient;
     private final DrawManager drawManager;
 
     @Inject
-    DiscordWebhookClient(BingoDiscordLoggerConfig config, OkHttpClient okHttpClient, DrawManager drawManager)
+    DiscordWebhookClient(BrozzerLoggerConfig config, OkHttpClient okHttpClient, DrawManager drawManager)
     {
         this.config = config;
         this.okHttpClient = okHttpClient;

@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import java.util.Set;
 import org.junit.Test;

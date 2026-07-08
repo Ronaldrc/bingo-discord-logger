@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Behavioural tests for the core matching logic in
- * {@link BingoDiscordLoggerPlugin#onLootReceived(LootReceived)}:
+ * {@link BrozzerLoggerPlugin#onLootReceived(LootReceived)}:
  * PvP loot is dropped, an empty bingo set is a no-op, only items whose
  * {@code canonicalize}d ID is in the set are forwarded, and the captured
  * {@link WebhookBody} carries the right structured data.
@@ -46,7 +46,7 @@ public class BingoLootMatchingTest
 	private Client client;
 
 	@Mock
-	private BingoDiscordLoggerConfig config;
+	private BrozzerLoggerConfig config;
 
 	@Mock
 	private ItemManager itemManager;
@@ -64,7 +64,7 @@ public class BingoLootMatchingTest
 	private ArgumentCaptor<WebhookBody> bodyCaptor;
 
 	@InjectMocks
-	private BingoDiscordLoggerPlugin plugin;
+	private BrozzerLoggerPlugin plugin;
 
 	@Before
 	public void setUp()

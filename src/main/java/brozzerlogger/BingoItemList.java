@@ -1,4 +1,4 @@
-package bingodiscordlogger;
+package brozzerlogger;
 
 import com.google.common.base.Strings;
 
@@ -34,7 +34,7 @@ public class BingoItemList
 {
     private static final long REFRESH_MINUTES = 15;
 
-    private final BingoDiscordLoggerConfig config;
+    private final BrozzerLoggerConfig config;
     private final OkHttpClient okHttpClient;
     private final ScheduledExecutorService executor;
 
@@ -45,7 +45,7 @@ public class BingoItemList
     private ScheduledFuture<?> refreshFuture;
 
     @Inject
-    BingoItemList(BingoDiscordLoggerConfig config, OkHttpClient okHttpClient, ScheduledExecutorService executor)
+    BingoItemList(BrozzerLoggerConfig config, OkHttpClient okHttpClient, ScheduledExecutorService executor)
     {
         this.config = config;
         this.okHttpClient = okHttpClient;
