@@ -22,7 +22,7 @@ import java.util.Set;
 @Slf4j
 @PluginDescriptor(
         name = "Brozzer Logger",
-        description = "Sends bingo-relevant drops to a Discord webhook",
+        description = "Sends bingo-relevant drops to a Discord webhook using Google Sheets for bingo list",
         tags = {"bingo", "clan", "loot", "webhook", "discord"},
         configName = "BingoDiscordLoggerPlugin"
 )
