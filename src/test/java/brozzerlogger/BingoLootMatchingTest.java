@@ -74,6 +74,7 @@ public class BingoLootMatchingTest
 		// By default, item IDs are already canonical (identity); overridden where noted.
 		lenient().when(itemManager.canonicalize(anyInt())).thenAnswer(inv -> inv.getArgument(0));
 		lenient().when(config.sendScreenshot()).thenReturn(false);
+		lenient().when(config.teamColor()).thenReturn(BrozzerLoggerConfig.TeamColor.GRAY);
 	}
 
 	private static LootReceived loot(LootRecordType type, ItemStack... items)
