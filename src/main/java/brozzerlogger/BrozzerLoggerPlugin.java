@@ -16,6 +16,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.loottracker.LootReceived;
 import net.runelite.http.api.loottracker.LootRecordType;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
 
@@ -155,8 +156,15 @@ public class BrozzerLoggerPlugin extends Plugin
 
         // Create Discord embedding
         WebhookBody.Embed embed = new WebhookBody.Embed();
-        embed.setColor(0x57F287);
-        embed.setTitle("Bingo Loot");
+
+        int color = config.teamColor().getRgb();
+        embed.setColor(color); // User-selected color is used. Defaults to gray
+
+        String title = StringUtils.isBlank(config.teamName())
+                ? "Bingo Loot"
+                : config.teamName() + " — Bingo Loot";
+        embed.setTitle(title); // User-defined team name is used. Defaults to Bingo Loot
+
         String description = payload.getPlayer() + " has looted:\n\n" + dropList + "\nFrom: " + payload.getSource();
         embed.setDescription(description);
 
