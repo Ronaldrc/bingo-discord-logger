@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img.png" alt="Lil Brozzer mug shot"/>
+  <img src="Images/purple_head.png" alt="Lil Brozzer mug shot"/>
 </p>
 
 # Bingo Discord Logger
@@ -22,20 +22,23 @@ logged automatically as they happen.
 Noted and placeholder item variants are resolved to their canonical IDs, so you only need to
 list the base item. PvP (player-kill) loot is ignored.
 
+## Prerequisites
+- YOU MUST enable **Loot Tracker** plugin in Runelite for this plugin to work.
+
 ## Setup
 
 1. In Discord: **Server Settings → Integrations → Webhooks → New Webhook**, then **Copy Webhook URL**.
-2. In RuneLite, open the **Bingo Discord Logger** plugin settings.
+2. In RuneLite, open the **Brozzer Logger** plugin settings.
 3. Paste the webhook URL into **Discord Webhook URL**. To post to multiple channels, put each
    webhook URL on its own line.
 4. Configure which items count as bingo drops (see below).
 
 ### Configuration
 
-| Setting | Description |
-| --- | --- |
-| **Send Screenshot** | Attach a screenshot of the next frame when a drop is logged. On by default. |
-| **Discord Webhook URL** | One or more Discord webhook URLs, one per line. |
+| Setting | Description                                                                                                                                |
+| --- |--------------------------------------------------------------------------------------------------------------------------------------------|
+| **Send Screenshot** | Attach a screenshot of the next frame when a drop is logged. On by default.                                                                |
+| **Discord Webhook URL** | A Discord webhook URL                                                                                                                      |
 | **Bingo List URL** | Link to a published Google Sheet (CSV) whose first column is item IDs. Shared across everyone using the same link. Leave blank to disable. |
 
 #### Using a Google Sheet
@@ -45,12 +48,14 @@ list the base item. PvP (player-kill) loot is ignored.
 2. **File → Share → Publish to web**, choose the sheet, and select **Comma-separated values (.csv)**.
 3. Paste the published CSV link into **Bingo List URL**.
 
-> **Privacy note:** the Bingo List URL feature fetches from a third-party server (e.g. Google),
-> which submits your IP address to a server not controlled or verified by the RuneLite developers.
-> It is opt-in and only active when a URL is set.
-
-Item IDs can be looked up on the [OSRS Wiki](https://oldschool.runescape.wiki/) or via RuneLite's
+Item IDs can be looked up on the [OSRS Wiki Item IDs](https://oldschool.runescape.wiki/w/Item_IDs) or via RuneLite's
 item search.
+
+## Example
+
+![publish_to_web.png](Images/share_web.png)
+
+![lil_b_google_sheet.png](Images/google_sheet.png)
 
 ## How it works
 
@@ -60,6 +65,12 @@ When a matching drop is received, the plugin builds a single `multipart/form-dat
 - a machine-readable `bingo` payload (player, structured item data),
 
 so the same message renders nicely for people **and** can be consumed by a downstream bot.
+
+## Privacy note
+
+The Bingo List URL feature fetches from a third-party server (e.g. Google),
+which submits your IP address to a server not controlled or verified by the RuneLite developers.
+It is opt-in and only active when a URL is set.
 
 ## Development
 
